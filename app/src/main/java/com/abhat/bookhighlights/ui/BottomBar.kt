@@ -52,7 +52,7 @@ fun BottomBar() {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun BottomBarPreview() {
     BookHighlightsComposeTheme {
         BottomBar()
     }
