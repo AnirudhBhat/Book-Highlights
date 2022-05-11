@@ -53,6 +53,7 @@ fun HighlightOfTheDayPreview() {
     BookHighlightsComposeTheme {
         HighlightOfTheDay(
             highlight = "Health lies in action, and so it graces youth. To be busy is the secret of grace, and half the secret of content. Let us ask the gods not for possessions, but for things to do; happiness is in making things rather than in consuming them",
-            book = "Test book title")
+            book = "Test book title"
+        )
     }
 }
