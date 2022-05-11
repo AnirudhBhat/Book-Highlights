@@ -1,7 +1,6 @@
 package com.abhat.bookhighlights.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
@@ -11,7 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.LightGray
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.abhat.bookhighlights.bookslist.model.Book
@@ -31,9 +30,10 @@ fun BooksList(
                 onBookClick = onBookClick
             )
             Divider(
-                modifier = Modifier.offset(16.dp),
-                color = LightGray,
-                thickness = 10.dp
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                color = Color.LightGray,
             )
         }
     }
