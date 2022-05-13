@@ -2,6 +2,7 @@ package com.abhat.bookhighlights
 
 import android.Manifest
 import android.os.Bundle
+import android.os.Environment
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -15,12 +16,17 @@ import com.abhat.anumathi.anumathi
 import com.abhat.anumathi.registerPermissions
 import com.abhat.bookhighlights.bookslist.BooksListViewModel
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.CheckStoragePermission
+import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.ParseBooksFromStorage
+import com.abhat.bookhighlights.bookslist.BooksParser
 import com.abhat.bookhighlights.ui.BottomBar
 import com.abhat.bookhighlights.ui.theme.BookHighlightsComposeTheme
 import kotlinx.coroutines.launch
+import java.io.File
 
 class MainActivity : ComponentActivity() {
-    val viewModel: BooksListViewModel by viewModels()
+    private val viewModel: BooksListViewModel by viewModels {
+        ViewModelFactory(this, BooksParser())
+    }
     private val registerPermission = registerPermissions()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +54,20 @@ class MainActivity : ComponentActivity() {
                         val result = anumathi(
                             registerPermission,
                             arrayOf(
-                                Manifest.permission.ACCESS_MEDIA_LOCATION
+                                Manifest.permission.READ_EXTERNAL_STORAGE
                             )
                         )
                         handlePermissionResult(result, event)
                     }
+                }
+                ParseBooksFromStorage -> {
+                    viewModel.parseBooks(
+                        File(
+                            getExternalFilesDir(
+                                Environment.DIRECTORY_DOWNLOADS
+                            )?.toURI()
+                        ).listFiles().toList()
+                    )
                 }
             }
         })

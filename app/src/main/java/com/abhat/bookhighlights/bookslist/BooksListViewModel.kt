@@ -6,9 +6,11 @@ import com.abhat.bookhighlights.SingleLiveEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.io.File
 
 class BooksListViewModel(
     private val savedStateHandle: SavedStateHandle,
+    private val booksParser: BooksParser,
 ) : ViewModel() {
 
     private val booksUiState: MutableStateFlow<BooksListUIState> = MutableStateFlow(BooksListUIState.Loading)
@@ -25,6 +27,10 @@ class BooksListViewModel(
         showRationale: Boolean
     ) {
         event.value = Event.ParseBooksFromStorage
+    }
+
+    fun parseBooks(htmlFiles: List<File>) {
+        booksParser.parseHtml(htmlFiles)
     }
 
 
