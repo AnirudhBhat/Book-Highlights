@@ -3,7 +3,8 @@ package com.abhat.bookhighlights
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.abhat.bookhighlights.bookslist.BooksListViewModel
-import com.nhaarman.mockitokotlin2.mock
+import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.CheckStoragePermission
+import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.ParseBooksFromStorage
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -25,7 +26,17 @@ class BooksListViewModelTest {
     @Test
     fun `when view model init, CheckStoragePermission event is triggered`() {
         assertThat(viewModel.event.value).isInstanceOf(
-            BooksListViewModel.Event.CheckStoragePermission::class.java
+            CheckStoragePermission::class.java
+        )
+    }
+
+    @Test
+    fun `given viewmodel init, when storage permission granted, ParseBookFromStorage event is triggered`() {
+        (viewModel.event.value as CheckStoragePermission).onStoragePermissionsResult.invoke(
+            true, false
+        )
+        assertThat(viewModel.event.value).isInstanceOf(
+            ParseBooksFromStorage::class.java
         )
     }
 }

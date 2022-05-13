@@ -17,11 +17,24 @@ class BooksListViewModel(
     val event: SingleLiveEvent<Event> = SingleLiveEvent()
 
     init {
-        event.value = Event.CheckStoragePermission
+        event.value = Event.CheckStoragePermission(::onStoragePermissionsResult)
+    }
+
+    private fun onStoragePermissionsResult(
+        permissionGranted: Boolean,
+        showRationale: Boolean
+    ) {
+        event.value = Event.ParseBooksFromStorage
     }
 
 
     sealed class Event {
-        object CheckStoragePermission : Event()
+        data class CheckStoragePermission(
+            val onStoragePermissionsResult: (
+                permissionGranted: Boolean,
+                showRationale: Boolean
+            ) -> Unit
+        ) : Event()
+        object ParseBooksFromStorage : Event()
     }
 }

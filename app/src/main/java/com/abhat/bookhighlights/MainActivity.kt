@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
     private fun observeEvents() {
         viewModel.event.observe(this, Observer { event ->
             when (event) {
-                CheckStoragePermission -> {
+                is CheckStoragePermission -> {
                     lifecycleScope.launch {
                         val result = anumathi(
                             registerPermission,
@@ -51,21 +51,26 @@ class MainActivity : ComponentActivity() {
                                 Manifest.permission.ACCESS_MEDIA_LOCATION
                             )
                         )
-                        handlePermissionResult(result)
+                        handlePermissionResult(result, event)
                     }
                 }
             }
         })
     }
 
-    private fun handlePermissionResult(result: Map<String, PermissionResult>) {
+    private fun handlePermissionResult(
+        result: Map<String, PermissionResult>,
+        event: CheckStoragePermission
+    ) {
         result.map { (permission, state) ->
             when (state) {
                 is PermissionResult.Denied -> {
-
+                        event.onStoragePermissionsResult
+                            .invoke(false, state.shouldShowRationale)
                 }
                 PermissionResult.Granted -> {
-
+                    event.onStoragePermissionsResult
+                        .invoke(true, false)
                 }
             }
         }
