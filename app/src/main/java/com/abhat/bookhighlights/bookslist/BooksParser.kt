@@ -2,44 +2,33 @@ package com.abhat.bookhighlights.bookslist
 
 import com.abhat.bookhighlights.bookslist.model.Book
 import com.abhat.bookhighlights.bookslist.model.Highlight
-import org.jsoup.Jsoup
 import java.io.File
 
-class BooksParser {
-    val bookList = mutableListOf<Book>()
+class BooksParser(
+    private val htmlParser: Parser
+) {
+    private val bookList = mutableListOf<Book>()
 
-    fun parseHtml(
-        htmlFiles: List<File>,
+    fun parseBooks(
+        books: List<File>,
     ): List<Book> {
         bookList.clear()
-        htmlFiles.forEach { file ->
-            val document = Jsoup.parse(file, "UTF-8")
-            val noteHeading = document.getElementsByClass("noteHeading").eachText()
-            val noteText = document.getElementsByClass("noteText").eachText()
+        val htmlDocumentsList = htmlParser.parseHtml(books)
+        htmlDocumentsList.forEachIndexed { index, htmlDocument ->
             val highlights = mutableListOf<Highlight>()
-            if (noteHeading.size == noteText.size) {
-                noteText.forEachIndexed { index,  text ->
-                    highlights.add(
-                        Highlight(
-                            line = "",
-                            heading = noteHeading[index].replace("Highlight (yellow) -", "").replace(">", "-"),
-                            highlightText = noteText[index]
-                        ))
-                }
-            } else {
-                noteText.forEachIndexed { index,  text ->
-                    highlights.add(
-                        Highlight(
-                            line = "",
-                            heading = "",
-                            highlightText = noteText[index]
-                        )
+            htmlDocument.highlight.forEachIndexed { index, highlight ->
+                highlights.add(
+                    Highlight(
+                        line = "",
+                        heading = htmlDocument.heading[index].replace("Highlight (yellow) - ", "")
+                            .replace(">", "-"),
+                        highlightText = highlight
                     )
-                }
+                )
             }
             bookList.add(
                 Book(
-                    title = file.name.replace("- Notebook.html", ""),
+                    title = htmlDocumentsList[index].bookName,
                     highlights = highlights
                 )
             )
