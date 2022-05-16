@@ -6,18 +6,23 @@ import android.os.Environment
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.abhat.anumathi.PermissionResult
 import com.abhat.anumathi.anumathi
 import com.abhat.anumathi.registerPermissions
+import com.abhat.bookhighlights.bookslist.BooksListUIState
 import com.abhat.bookhighlights.bookslist.BooksListViewModel
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.CheckStoragePermission
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.ParseBooksFromStorage
 import com.abhat.bookhighlights.bookslist.BooksParser
+import com.abhat.bookhighlights.ui.BooksList
 import com.abhat.bookhighlights.ui.BottomBar
 import com.abhat.bookhighlights.ui.theme.BookHighlightsComposeTheme
 import kotlinx.coroutines.launch
@@ -29,18 +34,34 @@ class MainActivity : ComponentActivity() {
     }
     private val registerPermission = registerPermissions()
 
+
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeEvents()
+        val onBookClick = { title: String ->
+        }
         setContent {
             BookHighlightsComposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     Scaffold(
-                        bottomBar = { BottomBar() }
-                    ) {
+                        bottomBar = { BottomBar() },
+                        content = {
+                            val books: BooksListUIState by viewModel.viewState.observeAsState(BooksListUIState.Loading)
+                            when (books) {
+                                is BooksListUIState.Error -> {
 
-                    }
+                                }
+                                BooksListUIState.Loading -> {
+
+                                }
+                                is BooksListUIState.Success -> {
+                                    BooksList(booksList = books.booksList, onBookClick = onBookClick)
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
