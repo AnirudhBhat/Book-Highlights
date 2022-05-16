@@ -82,14 +82,12 @@ class MainActivity : ComponentActivity() {
                         handlePermissionResult(result, event)
                     }
                 }
-                ParseBooksFromStorage -> {
-                    viewModel.parseBooks(
-                        File(
-                            getExternalFilesDir(
-                                Environment.DIRECTORY_DOWNLOADS
-                            )?.toURI()
-                        ).listFiles().toList()
-                    )
+                is ParseBooksFromStorage -> {
+                    event.parseBooks.invoke(File(
+                        getExternalFilesDir(
+                            Environment.DIRECTORY_DOWNLOADS
+                        )?.toURI()
+                    ).listFiles().toList())
                 }
             }
         })

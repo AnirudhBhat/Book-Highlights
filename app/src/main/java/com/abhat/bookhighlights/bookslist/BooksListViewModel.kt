@@ -25,13 +25,20 @@ class BooksListViewModel(
         permissionGranted: Boolean,
         showRationale: Boolean
     ) {
-        event.value = Event.ParseBooksFromStorage
+        event.value = Event.ParseBooksFromStorage(::parseBooks)
     }
 
-    fun parseBooks(books: List<File>) {
-        booksUiState.value = BooksListUIState.Success(
-            booksList = booksParser.parseBooks(books)
-        )
+    private fun parseBooks(books: List<File>) {
+        val booksList = booksParser.parseBooks(books)
+        if (!booksList.isNullOrEmpty()) {
+            booksUiState.value = BooksListUIState.Success(
+                booksList = booksList
+            )
+        } else {
+            booksUiState.value = BooksListUIState.Error(
+                error = Throwable("No books found in the specified location!")
+            )
+        }
     }
 
 
@@ -42,6 +49,8 @@ class BooksListViewModel(
                 showRationale: Boolean
             ) -> Unit
         ) : Event()
-        object ParseBooksFromStorage : Event()
+        data class ParseBooksFromStorage(
+            val parseBooks: (List<File>) -> Unit
+        ) : Event()
     }
 }
