@@ -28,9 +28,9 @@ class BooksListViewModel(
         event.value = Event.ParseBooksFromStorage
     }
 
-    fun parseBooks(htmlFiles: List<File>) {
+    fun parseBooks(books: List<File>) {
         booksUiState.value = BooksListUIState.Success(
-            booksList = booksParser.parseHtml(htmlFiles)
+            booksList = booksParser.parseBooks(books)
         )
     }
 
