@@ -1,11 +1,10 @@
 package com.abhat.bookhighlights.bookslist
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.abhat.bookhighlights.SingleLiveEvent
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import java.io.File
 
 class BooksListViewModel(
@@ -13,8 +12,8 @@ class BooksListViewModel(
     private val booksParser: BooksParser,
 ) : ViewModel() {
 
-    private val booksUiState: MutableStateFlow<BooksListUIState> = MutableStateFlow(BooksListUIState.Loading)
-    val viewState: StateFlow<BooksListUIState> = booksUiState.asStateFlow()
+    private val booksUiState: MutableLiveData<BooksListUIState> = MutableLiveData(BooksListUIState.Loading)
+    val viewState: LiveData<BooksListUIState> = booksUiState
 
     val event: SingleLiveEvent<Event> = SingleLiveEvent()
 
@@ -30,7 +29,9 @@ class BooksListViewModel(
     }
 
     fun parseBooks(htmlFiles: List<File>) {
-        booksParser.parseHtml(htmlFiles)
+        booksUiState.value = BooksListUIState.Success(
+            booksList = booksParser.parseHtml(htmlFiles)
+        )
     }
 
 
