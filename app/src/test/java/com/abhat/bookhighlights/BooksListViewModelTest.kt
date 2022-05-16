@@ -6,7 +6,6 @@ import com.abhat.bookhighlights.bookslist.BooksListViewModel
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.CheckStoragePermission
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.ParseBooksFromStorage
 import com.abhat.bookhighlights.bookslist.BooksParser
-import com.nhaarman.mockitokotlin2.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
