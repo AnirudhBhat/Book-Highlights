@@ -137,13 +137,15 @@ class BooksListViewModelTest {
         assertThat(viewModel.viewState.value).isEqualTo(expectedSuccessState)
     }
 
-//    @Test
-//    fun `given no books in storage, when viewmodel init, error state is shown`() {
-//        (viewModel.event.value as CheckStoragePermission).onStoragePermissionsResult.invoke(
-//            true, false
-//        )
-//        assertThat(viewModel.event.value).isInstanceOf(
-//            ParseBooksFromStorage::class.java
-//        )
-//    }
+    @Test
+    fun `given storage permission granted, when books NOT found on storage, then error state is shown`() {
+        whenever(booksParser.parseHtml(any())).thenReturn(mutableListOf())
+        init()
+
+        (viewModel.event.value as ParseBooksFromStorage).parseBooks.invoke(listOf())
+
+        assertThat(viewModel.viewState.value).isInstanceOf(
+            BooksListUIState.Error::class.java
+        )
+    }
 }
