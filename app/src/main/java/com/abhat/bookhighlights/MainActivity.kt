@@ -22,6 +22,7 @@ import com.abhat.bookhighlights.bookslist.BooksListViewModel
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.CheckStoragePermission
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.ParseBooksFromStorage
 import com.abhat.bookhighlights.bookslist.BooksParser
+import com.abhat.bookhighlights.bookslist.HtmlParser
 import com.abhat.bookhighlights.ui.BooksList
 import com.abhat.bookhighlights.ui.BottomBar
 import com.abhat.bookhighlights.ui.theme.BookHighlightsComposeTheme
@@ -30,7 +31,7 @@ import java.io.File
 
 class MainActivity : ComponentActivity() {
     private val viewModel: BooksListViewModel by viewModels {
-        ViewModelFactory(this, BooksParser())
+        ViewModelFactory(this, BooksParser(HtmlParser))
     }
     private val registerPermission = registerPermissions()
 
