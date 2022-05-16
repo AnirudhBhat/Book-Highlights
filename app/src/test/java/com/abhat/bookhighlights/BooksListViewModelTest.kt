@@ -148,4 +148,15 @@ class BooksListViewModelTest {
             BooksListUIState.Error::class.java
         )
     }
+
+    @Test
+    fun `given storage permission granted, when books NOT found on storage, then error state is shown with correct message`() {
+        whenever(booksParser.parseHtml(any())).thenReturn(mutableListOf())
+        init()
+        val expectedErrorMessage = "No books found in the specified location!"
+        (viewModel.event.value as ParseBooksFromStorage).parseBooks.invoke(listOf())
+        val actualErrorMessage = (viewModel.viewState.value as BooksListUIState.Error).error.message
+
+        assertThat(actualErrorMessage).isEqualTo(expectedErrorMessage)
+    }
 }
