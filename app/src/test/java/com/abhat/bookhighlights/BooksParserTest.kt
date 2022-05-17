@@ -1,7 +1,7 @@
 package com.abhat.bookhighlights
 
-import com.abhat.bookhighlights.bookslist.BooksParser
-import com.abhat.bookhighlights.bookslist.Parser
+import com.abhat.bookhighlights.bookslist.parser.BooksParser
+import com.abhat.bookhighlights.bookslist.parser.Parser
 import com.abhat.bookhighlights.bookslist.model.Book
 import com.abhat.bookhighlights.bookslist.model.Highlight
 import com.abhat.bookhighlights.bookslist.model.HtmlDocument

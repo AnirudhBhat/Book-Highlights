@@ -21,8 +21,8 @@ import com.abhat.bookhighlights.bookslist.BooksListUIState
 import com.abhat.bookhighlights.bookslist.BooksListViewModel
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.CheckStoragePermission
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.ParseBooksFromStorage
-import com.abhat.bookhighlights.bookslist.BooksParser
-import com.abhat.bookhighlights.bookslist.HtmlParser
+import com.abhat.bookhighlights.bookslist.parser.BooksParser
+import com.abhat.bookhighlights.bookslist.parser.HtmlParser
 import com.abhat.bookhighlights.ui.BooksList
 import com.abhat.bookhighlights.ui.BottomBar
 import com.abhat.bookhighlights.ui.theme.BookHighlightsComposeTheme

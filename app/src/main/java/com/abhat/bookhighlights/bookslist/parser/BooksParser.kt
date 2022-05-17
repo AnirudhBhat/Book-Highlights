@@ -1,4 +1,4 @@
-package com.abhat.bookhighlights.bookslist
+package com.abhat.bookhighlights.bookslist.parser
 
 import com.abhat.bookhighlights.bookslist.model.Book
 import com.abhat.bookhighlights.bookslist.model.Highlight

@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.abhat.bookhighlights.bookslist.BooksListViewModel
-import com.abhat.bookhighlights.bookslist.BooksParser
+import com.abhat.bookhighlights.bookslist.parser.BooksParser
 
 class ViewModelFactory(owner: SavedStateRegistryOwner,
                        private val booksParser: BooksParser,

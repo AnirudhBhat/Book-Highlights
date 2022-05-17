@@ -1,4 +1,4 @@
-package com.abhat.bookhighlights.bookslist
+package com.abhat.bookhighlights.bookslist.parser
 
 import com.abhat.bookhighlights.bookslist.model.HtmlDocument
 import java.io.File
