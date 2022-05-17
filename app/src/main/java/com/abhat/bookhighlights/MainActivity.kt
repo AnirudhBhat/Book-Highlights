@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     Scaffold(
                         bottomBar = { BottomBar() },
-                        content = {
+                        content = { padding ->
                             val books: BooksListUIState by viewModel.viewState.observeAsState(BooksListUIState.Loading)
                             when (books) {
                                 is BooksListUIState.Error -> {
@@ -58,7 +58,11 @@ class MainActivity : ComponentActivity() {
 
                                 }
                                 is BooksListUIState.Success -> {
-                                    BooksList(booksList = books.booksList, onBookClick = onBookClick)
+                                    BooksList(
+                                        booksList = books.booksList,
+                                        paddingValues = padding,
+                                        onBookClick = onBookClick
+                                    )
                                 }
                             }
                         }

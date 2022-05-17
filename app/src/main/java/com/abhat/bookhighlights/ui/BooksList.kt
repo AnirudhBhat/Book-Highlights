@@ -1,5 +1,6 @@
 package com.abhat.bookhighlights.ui
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,9 +22,14 @@ import com.abhat.bookhighlights.ui.theme.BookHighlightsComposeTheme
 @Composable
 fun BooksList(
     booksList: List<Book>,
+    paddingValues: PaddingValues,
     onBookClick: (String) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier.padding(
+            bottom = paddingValues.calculateBottomPadding()
+        )
+    ) {
         items(booksList.size) {
             BooksListItem(
                 title = booksList[it].title,
@@ -93,6 +99,7 @@ fun BooksListPreview() {
                     )
                 )
             ),
+            paddingValues = PaddingValues(24.dp),
             onBookClick = {}
         )
     }
