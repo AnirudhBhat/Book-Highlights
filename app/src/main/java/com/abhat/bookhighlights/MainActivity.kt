@@ -6,6 +6,7 @@ import android.os.Environment
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -23,6 +24,8 @@ import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.CheckStorageP
 import com.abhat.bookhighlights.bookslist.BooksListViewModel.Event.ParseBooksFromStorage
 import com.abhat.bookhighlights.bookslist.parser.BooksParser
 import com.abhat.bookhighlights.bookslist.parser.HtmlParser
+import com.abhat.bookhighlights.di.BooksListGraph
+import com.abhat.bookhighlights.di.NetworkGraphImpl
 import com.abhat.bookhighlights.ui.BooksList
 import com.abhat.bookhighlights.ui.BottomBar
 import com.abhat.bookhighlights.ui.theme.BookHighlightsComposeTheme
@@ -30,13 +33,18 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class MainActivity : ComponentActivity() {
+    private val booksListGraph: BooksListGraph by lazy { NetworkGraphImpl(this) }
     private val viewModel: BooksListViewModel by viewModels {
-        ViewModelFactory(this, BooksParser(HtmlParser))
+        ViewModelFactory(this, booksListGraph.booksListRepository, BooksParser(HtmlParser))
     }
     private val registerPermission = registerPermissions()
 
 
-    @OptIn(ExperimentalMaterialApi::class)
+
+
+    @OptIn(ExperimentalMaterialApi::class,
+        androidx.compose.foundation.ExperimentalFoundationApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeEvents()
@@ -87,11 +95,16 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 is ParseBooksFromStorage -> {
-                    event.parseBooks.invoke(File(
-                        getExternalFilesDir(
-                            Environment.DIRECTORY_DOWNLOADS
-                        )?.toURI()
-                    ).listFiles().toList())
+                    lifecycleScope.launch {
+                        event.parseBooks.invoke(File(
+                            getExternalFilesDir(
+                                Environment.DIRECTORY_DOWNLOADS
+                            )?.toURI()
+                        ).listFiles().toList())
+                    }
+                }
+                is BooksListViewModel.Event.GetBookDetails -> {
+                    event.getBookDetails.invoke(event.booksList)
                 }
             }
         })
