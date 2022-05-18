@@ -29,6 +29,7 @@ class BooksParser(
             bookList.add(
                 Book(
                     title = htmlDocumentsList[index].bookName,
+                    thumbnail = "",
                     highlights = highlights
                 )
             )

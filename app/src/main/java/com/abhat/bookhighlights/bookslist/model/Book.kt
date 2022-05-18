@@ -2,6 +2,7 @@ package com.abhat.bookhighlights.bookslist.model
 
 data class Book(
     val title: String,
+    val thumbnail: String,
     val highlights: MutableList<Highlight> = mutableListOf(),
 )
 

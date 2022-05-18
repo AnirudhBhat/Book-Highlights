@@ -87,6 +87,7 @@ fun HighlightsListPreview() {
         HighlightsList(
             Book(
                 title = "Make Time",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
