@@ -72,6 +72,7 @@ class BooksParserTest {
         val expectedBooksList = listOf(
             Book(
                 title = "Book name 1",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
@@ -92,6 +93,7 @@ class BooksParserTest {
             ),
             Book(
                 title = "Book name 2",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
@@ -112,6 +114,7 @@ class BooksParserTest {
             ),
             Book(
                 title = "Book name 3",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
@@ -175,6 +178,7 @@ class BooksParserTest {
         val expectedBooksList = listOf(
             Book(
                 title = "Book name 1",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
@@ -195,6 +199,7 @@ class BooksParserTest {
             ),
             Book(
                 title = "Book name 2",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
@@ -215,6 +220,7 @@ class BooksParserTest {
             ),
             Book(
                 title = "Book name 3",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
@@ -278,6 +284,7 @@ class BooksParserTest {
         val expectedBooksList = listOf(
             Book(
                 title = "Book name 1",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
@@ -298,6 +305,7 @@ class BooksParserTest {
             ),
             Book(
                 title = "Book name 2",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
@@ -318,6 +326,7 @@ class BooksParserTest {
             ),
             Book(
                 title = "Book name 3",
+                thumbnail = "",
                 highlights = mutableListOf(
                     Highlight(
                         line = "",
