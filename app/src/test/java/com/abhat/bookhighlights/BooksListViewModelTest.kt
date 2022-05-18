@@ -12,11 +12,19 @@ import com.abhat.bookhighlights.bookslist.parser.Parser
 import com.abhat.bookhighlights.bookslist.model.Book
 import com.abhat.bookhighlights.bookslist.model.Highlight
 import com.abhat.bookhighlights.bookslist.model.HtmlDocument
+import com.abhat.bookhighlights.bookslist.repository.BooksListRepoState
 import com.abhat.bookhighlights.bookslist.repository.BooksListRepository
+import com.abhat.bookhighlights.bookslist.repository.model.ImageLinks
+import com.abhat.bookhighlights.bookslist.repository.model.Items
+import com.abhat.bookhighlights.bookslist.repository.model.VolumeInfo
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -213,6 +221,193 @@ class BooksListViewModelTest {
             val actualErrorMessage = (viewModel.viewState.value as BooksListUIState.Error).error.message
 
             assertThat(actualErrorMessage).isEqualTo(expectedErrorMessage)
+        }
+    }
+
+    @Test
+    fun `given books found on storage, when google api succeeds, then book updated with the thumbnail`() {
+        runTest {
+            val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+            Dispatchers.setMain(testDispatcher)
+            val htmlFilesList = mutableListOf(
+                HtmlDocument(
+                    heading = listOf(
+                        "Highlight (yellow) - heading 1 book 1"
+                    ),
+                    highlight = listOf(
+                        "highlight 1 book 1"
+                    ),
+                    bookName = "Book name 1"
+                ),
+            )
+            whenever(booksParser.parseHtml(any())).thenReturn(htmlFilesList)
+            whenever(booksListRepository.getBookDetails("Book name 1")).thenReturn(
+                flow {
+                    emit(BooksListRepoState.Success(
+                        booksList = listOf(
+                            Items(
+                                VolumeInfo(
+                                    ImageLinks(
+                                        smallThumbnail = "",
+                                        thumbnail = "https://www.examplethumbnail.com/1.jpg"
+                                    )
+                                )
+                            )
+                        )
+                    ))
+                }
+            )
+             val booksList = listOf(
+                 Book(
+                     title = "Book name 1",
+                     thumbnail = "",
+                     highlights = mutableListOf(
+                         Highlight(
+                             line = "",
+                             heading = "heading 1 book 1",
+                             highlightText = "highlight 1 book 1"
+                         ),
+                     )
+                 )
+             )
+            init()
+            val expectedState = BooksListUIState.Success(
+                booksList = listOf(
+                    Book(
+                        title = "Book name 1",
+                        thumbnail = "https://www.examplethumbnail.com/1.jpg",
+                        highlights = mutableListOf(
+                            Highlight(
+                                line = "",
+                                heading = "heading 1 book 1",
+                                highlightText = "highlight 1 book 1"
+                            ),
+                        )
+                    )
+                )
+
+            )
+            (viewModel.event.value as ParseBooksFromStorage).parseBooks.invoke(listOf())
+            (viewModel.event.value as GetBookDetails).getBookDetails.invoke(booksList)
+
+            assertThat(viewModel.viewState.value).isEqualTo(expectedState)
+        }
+    }
+
+    @Test
+    fun `given books found on storage, when google api succeeds, then book list updated with the thumbnail`() {
+        runTest {
+            val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+            Dispatchers.setMain(testDispatcher)
+            val htmlFilesList = mutableListOf(
+                HtmlDocument(
+                    heading = listOf(
+                        "Highlight (yellow) - heading 1 book 1"
+                    ),
+                    highlight = listOf(
+                        "highlight 1 book 1"
+                    ),
+                    bookName = "Book name 1"
+                ),
+                HtmlDocument(
+                    heading = listOf(
+                        "Highlight (yellow) - heading 1 book 1"
+                    ),
+                    highlight = listOf(
+                        "highlight 1 book 1"
+                    ),
+                    bookName = "Book name 2"
+                ),
+            )
+            whenever(booksParser.parseHtml(any())).thenReturn(htmlFilesList)
+            whenever(booksListRepository.getBookDetails("Book name 1")).thenReturn(
+                flow {
+                    emit(BooksListRepoState.Success(
+                        booksList = listOf(
+                            Items(
+                                VolumeInfo(
+                                    ImageLinks(
+                                        smallThumbnail = "",
+                                        thumbnail = "https://www.examplethumbnail.com/1.jpg"
+                                    )
+                                )
+                            ),
+                        )
+                    ))
+                }
+            )
+            whenever(booksListRepository.getBookDetails("Book name 2")).thenReturn(
+                flow {
+                    emit(BooksListRepoState.Success(
+                        booksList = listOf(
+                            Items(
+                                VolumeInfo(
+                                    ImageLinks(
+                                        smallThumbnail = "",
+                                        thumbnail = "https://www.examplethumbnail.com/2.jpg"
+                                    )
+                                )
+                            )
+                        )
+                    ))
+                }
+            )
+            val booksList = listOf(
+                Book(
+                    title = "Book name 1",
+                    thumbnail = "",
+                    highlights = mutableListOf(
+                        Highlight(
+                            line = "",
+                            heading = "heading 1 book 1",
+                            highlightText = "highlight 1 book 1"
+                        ),
+                    )
+                ),
+                Book(
+                    title = "Book name 2",
+                    thumbnail = "",
+                    highlights = mutableListOf(
+                        Highlight(
+                            line = "",
+                            heading = "heading 1 book 1",
+                            highlightText = "highlight 1 book 1"
+                        ),
+                    )
+                )
+            )
+            init()
+            val expectedState = BooksListUIState.Success(
+                booksList = listOf(
+                    Book(
+                        title = "Book name 1",
+                        thumbnail = "https://www.examplethumbnail.com/1.jpg",
+                        highlights = mutableListOf(
+                            Highlight(
+                                line = "",
+                                heading = "heading 1 book 1",
+                                highlightText = "highlight 1 book 1"
+                            ),
+                        )
+                    ),
+                    Book(
+                        title = "Book name 2",
+                        thumbnail = "https://www.examplethumbnail.com/2.jpg",
+                        highlights = mutableListOf(
+                            Highlight(
+                                line = "",
+                                heading = "heading 1 book 1",
+                                highlightText = "highlight 1 book 1"
+                            ),
+                        )
+                    )
+                )
+
+            )
+            (viewModel.event.value as ParseBooksFromStorage).parseBooks.invoke(listOf())
+            (viewModel.event.value as GetBookDetails).getBookDetails.invoke(booksList)
+
+            assertThat(viewModel.viewState.value).isEqualTo(expectedState)
         }
     }
 }
