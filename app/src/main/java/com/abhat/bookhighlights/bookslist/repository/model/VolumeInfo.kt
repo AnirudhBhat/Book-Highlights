@@ -1,5 +1,5 @@
 package com.abhat.bookhighlights.bookslist.repository.model
 
-data class BooksListResponse(
-    val items: List<Items>
+data class VolumeInfo(
+    val imageLinks: ImageLinks
 )
