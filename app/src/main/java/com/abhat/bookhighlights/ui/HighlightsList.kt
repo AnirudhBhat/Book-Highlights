@@ -30,16 +30,22 @@ fun HighlightsList(
             bottom = 0.dp
         )
     ) {
+        item {
+            Text(
+                text = "Highlights: ${book.highlights.size}",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    top = 16.dp,
+                    end = 16.dp,
+                    bottom = 16.dp
+                )
+            )
+        }
         items(book.highlights.size) {
             HighlightsListItem(
                 heading = book.highlights[it].heading,
                 highlight = book.highlights[it].highlightText
-            )
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                color = Color.LightGray,
             )
         }
     }
@@ -52,7 +58,7 @@ fun HighlightsListItem(
 ) {
     Card(
         elevation = 16.dp,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.padding(8.dp)
     ) {
         Column {
             Text(
