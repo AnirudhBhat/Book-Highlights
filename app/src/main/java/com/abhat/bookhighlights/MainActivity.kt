@@ -11,10 +11,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import com.abhat.anumathi.PermissionResult
 import com.abhat.anumathi.anumathi
 import com.abhat.anumathi.registerPermissions
@@ -26,6 +28,7 @@ import com.abhat.bookhighlights.bookslist.parser.BooksParser
 import com.abhat.bookhighlights.bookslist.parser.HtmlParser
 import com.abhat.bookhighlights.di.BooksListGraph
 import com.abhat.bookhighlights.di.NetworkGraphImpl
+import com.abhat.bookhighlights.navigation.Navigation
 import com.abhat.bookhighlights.ui.BooksList
 import com.abhat.bookhighlights.ui.BottomBar
 import com.abhat.bookhighlights.ui.theme.BookHighlightsComposeTheme
@@ -54,27 +57,7 @@ class MainActivity : ComponentActivity() {
             BookHighlightsComposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Scaffold(
-                        bottomBar = { BottomBar() },
-                        content = { padding ->
-                            val books: BooksListUIState by viewModel.viewState.observeAsState(BooksListUIState.Loading)
-                            when (books) {
-                                is BooksListUIState.Error -> {
-
-                                }
-                                BooksListUIState.Loading -> {
-
-                                }
-                                is BooksListUIState.Success -> {
-                                    BooksList(
-                                        booksList = books.booksList,
-                                        paddingValues = padding,
-                                        onBookClick = onBookClick
-                                    )
-                                }
-                            }
-                        }
-                    )
+                    Navigation(viewModel)
                 }
             }
         }
