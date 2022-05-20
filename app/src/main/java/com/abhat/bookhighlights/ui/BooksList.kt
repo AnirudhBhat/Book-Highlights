@@ -29,7 +29,7 @@ import com.abhat.bookhighlights.ui.theme.BookHighlightsComposeTheme
 fun BooksList(
     booksList: List<Book>,
     paddingValues: PaddingValues,
-    onBookClick: (String) -> Unit
+    onBookClick: (Book) -> Unit
 ) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
@@ -40,16 +40,10 @@ fun BooksList(
     ) {
         items(booksList.size) {
             BooksListItem(
-                title = booksList[it].title,
+                book = booksList[it],
                 thumbnail = booksList[it].thumbnail,
                 onBookClick = onBookClick
             )
-//            Divider(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 16.dp),
-//                color = Color.LightGray,
-//            )
         }
     }
 }
@@ -57,9 +51,9 @@ fun BooksList(
 @ExperimentalMaterialApi
 @Composable
 fun BooksListItem(
-    title: String,
+    book: Book,
     thumbnail: String,
-    onBookClick: (String) -> Unit
+    onBookClick: (Book) -> Unit
 ) {
     Card(
         elevation = 16.dp,
@@ -67,7 +61,7 @@ fun BooksListItem(
             .fillMaxWidth()
             .padding(8.dp),
         onClick = {
-            onBookClick(title)
+            onBookClick(book)
         }
     ) {
         Column(
@@ -83,7 +77,7 @@ fun BooksListItem(
                     .width(150.dp)
             )
             Text(
-                text = title,
+                text = book.title,
                 style = MaterialTheme.typography.subtitle1,
                 modifier = Modifier.padding(8.dp)
             )
