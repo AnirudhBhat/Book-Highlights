@@ -1,9 +1,11 @@
 package com.abhat.bookhighlights.di
 
 import androidx.lifecycle.ViewModelStoreOwner
+import com.abhat.bookhighlights.MainActivity
 import com.abhat.bookhighlights.bookslist.data.api.BooksListApi
 import com.abhat.bookhighlights.bookslist.repository.BooksListRepository
 import com.abhat.bookhighlights.bookslist.repository.BooksListRepositoryImpl
+import com.abhat.bookhighlights.database.BooksHighlightsDatabase
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,5 +37,8 @@ class NetworkGraphImpl(viewModelStoreOwner: ViewModelStoreOwner) : BooksListGrap
 
 
 
-    override val booksListRepository: BooksListRepository = BooksListRepositoryImpl(retrofit.create(BooksListApi::class.java))
+    override val booksListRepository: BooksListRepository = BooksListRepositoryImpl(
+        retrofit.create(BooksListApi::class.java),
+        BooksHighlightsDatabase.getDatabaseInstance(viewModelStoreOwner as MainActivity)
+    )
 }
