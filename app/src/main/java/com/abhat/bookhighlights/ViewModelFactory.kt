@@ -8,6 +8,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.abhat.bookhighlights.bookslist.BooksListViewModel
 import com.abhat.bookhighlights.bookslist.parser.BooksParser
 import com.abhat.bookhighlights.bookslist.repository.BooksListRepository
+import com.abhat.bookhighlights.di.CoroutineContextProvider
 
 class ViewModelFactory(owner: SavedStateRegistryOwner,
                        private val booksListRepository: BooksListRepository,
@@ -17,5 +18,5 @@ class ViewModelFactory(owner: SavedStateRegistryOwner,
     override fun <T : ViewModel> create(key: String,
                                         modelClass: Class<T>,
                                         handle: SavedStateHandle
-        ):T = BooksListViewModel(handle, booksListRepository, booksParser) as T
+        ):T = BooksListViewModel(handle, CoroutineContextProvider(),  booksListRepository, booksParser) as T
 }
