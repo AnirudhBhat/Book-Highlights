@@ -1,11 +1,14 @@
 package com.abhat.bookhighlights.bookslist.repository
 
 import com.abhat.bookhighlights.bookslist.data.api.BooksListApi
+import com.abhat.bookhighlights.database.Books
+import com.abhat.bookhighlights.database.BooksHighlightsDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class BooksListRepositoryImpl(
-    private val booksListApi: BooksListApi
+    private val booksListApi: BooksListApi,
+    private val booksHighlightsDatabase: BooksHighlightsDatabase
 ): BooksListRepository {
     override suspend fun getBookDetails(title: String): Flow<BooksListRepoState> {
         return flow {
@@ -23,6 +26,24 @@ class BooksListRepositoryImpl(
                     )
                 )
             }
+        }
+    }
+
+    override fun insertBooks(books: Books) {
+        with(booksHighlightsDatabase.booksDAO()) {
+            insertBooksList(books)
+        }
+    }
+
+    override fun deleteBooks() {
+        with(booksHighlightsDatabase.booksDAO()) {
+            deleteBooks()
+        }
+    }
+
+    override fun getBooksList(): Books {
+        return with(booksHighlightsDatabase.booksDAO()) {
+            getBooksList()
         }
     }
 }
